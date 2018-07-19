@@ -11,38 +11,19 @@ let volume = 1.0;
 const play = (msg, params) => {
   try {
     youtubedl.getInfo(params[0], ['--format=bestaudio/best'], (err, info) => {
-      let t = params[0].match(/\?.*t=(\d+)/);
-      if (t && t.length > 1) t = +t[1];
-      if (isNaN(t)) t = undefined;
-      encoder = voiceConnection.createExternalEncoder({
-        type: "ffmpeg",
-        source: info.url,
-        outputArgs: buildOutputArgs(msg, 44100, params[1], params[2], t),
-        debug: true
-      });
-      encoder.play();
+      if (!err && info) {
+        let t = params[0].match(/\?.*t=(\d+)/);
+        if (t && t.length > 1) t = +t[1];
+        if (isNaN(t)) t = undefined;
+        encoder = voiceConnection.createExternalEncoder({
+          type: "ffmpeg",
+          source: info.url,
+          outputArgs: buildOutputArgs(msg, 44100, params[1], params[2], t),
+          debug: true
+        });
+        encoder.play();
+      }
     });
-
-    // ytdl.getInfo(params[0], { quality: 'highestaudio', filter: 'audio' }, (err, mediaInfo) => {
-    //   if (err) {
-    //   }
-    //   else {
-    //     var bestaudio = mediaInfo.formats.find(f => f.audioBitrate > 0 && !f.bitrate) || mediaInfo.formats.find(f => f.audioBitrate > 0);
-    //     if (!bestaudio) msg.reply("No valid formats");
-    //     else {
-    //       let t = params[0].match(/\?.*t=(\d+)/);
-    //       if (t && t.length > 1) t = +t[1];
-    //       if (isNaN(t)) t = undefined;
-    //       encoder = voiceConnection.createExternalEncoder({
-    //         type: "ffmpeg",
-    //         source: bestaudio.url,
-    //         outputArgs: buildOutputArgs(msg, 44100, params[1], params[2], t),
-    //         debug: true
-    //       });
-    //       encoder.play();
-    //     }
-    //   }
-    // });
   } catch (e) {
     // Not a youtube url, try playing it with ffmpeg
     encoder = voiceConnection.createExternalEncoder({
