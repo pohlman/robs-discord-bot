@@ -226,6 +226,7 @@ module.exports = {
               const num = +params[0];
               if (isNaN(num) || num < 0) msg.reply('Pass a time greater than 0.');
               else {
+                if (gnomeInterval) clearInterval(gnomeInterval);
                 gnomeInterval = setInterval(() => {
                   encoder = voiceConnection.createExternalEncoder({
                     type: "ffmpeg",
