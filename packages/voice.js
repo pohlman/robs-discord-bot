@@ -146,6 +146,40 @@ module.exports = {
             }
         },
 
+
+        // Play Awol
+        {
+          alias: ['pawol'],
+          params: 'filename',
+          help: 'RUN',
+          action: (bot, msg, params) => {
+              if (params.length < 1) {
+                msg.reply('Please pass a filename');
+              } else if (!voiceConnection) {
+                msg.reply("I'm not in a voice channel, use !join first.");
+              } else {
+
+                encoder = voiceConnection.createExternalEncoder({
+                  type: "ffmpeg",
+                  source: 'sfx/awol_beginning.mp3',
+                  outputArgs: buildOutputArgs(msg, 'sfx/awol_beginning.mp3', params[1], params[2]),
+                });
+                if (encoder) encoder.play();
+                setTimeout(() => {
+                  play(msg, params);
+                  setTimeout(() => {
+                    encoder = voiceConnection.createExternalEncoder({
+                      type: "ffmpeg",
+                      source: 'sfx/awol_end.mp3',
+                      outputArgs: buildOutputArgs(msg, 'sfx/awol_end.mp3', params[1], params[2]),
+                    });
+                    if (encoder) encoder.play();
+                  }, 1000);
+                }, 4250);
+              }
+          }
+        },
+
         // Stop
         {
             alias: ['stop', 's', 'vstop'],
@@ -246,7 +280,7 @@ module.exports = {
                     });
                     if (encoder) encoder.play();
                   }, 1000);
-                }, 4000);
+                }, 4600);
               }
           }
         },
