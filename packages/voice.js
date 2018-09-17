@@ -184,9 +184,9 @@ module.exports = {
             help: 'Try to play a file with the supplied filename',
             action: (bot, msg, params) => {
                 if (params.length < 1) {
-                    msg.reply('Please pass a filename');
+                  msg.reply('Please pass a filename');
                 } else if (!voiceConnection) {
-                    msg.reply("I'm not in a voice channel, use !join first.");
+                  msg.reply("I'm not in a voice channel, use !join first.");
                 } else {
                   encoder = voiceConnection.createExternalEncoder({
                     type: "ffmpeg",
@@ -206,11 +206,49 @@ module.exports = {
                 let res = 'Sfx options: ';
                 const files = fs.readdirSync('sfx/');
                 for (let i = 0; i < files.length; i++) {
-                    files[i] = files[i].substring(0, files[i].length - 4);
+                  files[i] = files[i].substring(0, files[i].length - 4);
                 }
                 res += files.join(', ');
                 msg.reply(res);
             }
+        },
+
+        // SFX Awol
+        {
+          alias: ['sfxawol'],
+          params: 'filename',
+          help: 'RUN',
+          action: (bot, msg, params) => {
+              if (params.length < 1) {
+                msg.reply('Please pass a filename');
+              } else if (!voiceConnection) {
+                msg.reply("I'm not in a voice channel, use !join first.");
+              } else {
+
+                encoder = voiceConnection.createExternalEncoder({
+                  type: "ffmpeg",
+                  source: 'sfx/awol_beginning.mp3',
+                  outputArgs: buildOutputArgs(msg, 'sfx/awol_beginning.mp3', params[1], params[2]),
+                });
+                if (encoder) encoder.play();
+                setTimeout(() => {
+                  encoder = voiceConnection.createExternalEncoder({
+                    type: "ffmpeg",
+                    source: 'sfx/' + params[0] + '.mp3',
+                    outputArgs: buildOutputArgs(msg, 'sfx/' + params[0] + '.mp3', params[1], params[2]),
+                  });
+                  if (encoder) encoder.play();
+                  setTimeout(() => {
+                    encoder = voiceConnection.createExternalEncoder({
+                      type: "ffmpeg",
+                      source: 'sfx/awol_end.mp3',
+                      outputArgs: buildOutputArgs(msg, 'sfx/awol_end.mp3', params[1], params[2]),
+                    });
+                    if (encoder) encoder.play();
+                  }, 1000);
+                }, 4000);
+              }
+          }
         },
 
         // Gnome Timer
@@ -221,7 +259,7 @@ module.exports = {
             if (params.length < 1) {
               msg.reply('Please pass a time in minutes');
             } else if (!voiceConnection) {
-                msg.reply("I'm not in a voice channel, use !join first.");
+              msg.reply("I'm not in a voice channel, use !join first.");
             } else {
               const num = +params[0];
               if (isNaN(num) || num < 0) msg.reply('Pass a time greater than 0.');
