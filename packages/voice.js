@@ -223,17 +223,19 @@ module.exports = {
             } else if (!voiceConnection) {
                 msg.reply("I'm not in a voice channel, use !join first.");
             } else {
-              const num = parseInt(params[0]);
-              if (isNaN(num) || num < 1) msg.reply('Pass a time greater than 1 minute.');
-              gnomeInterval = setInterval(() => {
-                encoder = voiceConnection.createExternalEncoder({
-                  type: "ffmpeg",
-                  source: 'sfx/gnome.mp3',
-                  outputArgs: buildOutputArgs(msg, 'sfx/gnome.mp3', params[1], params[2]),
-                });
-                encoder.play();
-              }, num * 1000 * 60);
-              msg.reply("The gnome is near.");
+              const num = +params[0];
+              if (isNaN(num) || num < 0) msg.reply('Pass a time greater than 0.');
+              else {
+                gnomeInterval = setInterval(() => {
+                  encoder = voiceConnection.createExternalEncoder({
+                    type: "ffmpeg",
+                    source: 'sfx/gnome.mp3',
+                    outputArgs: buildOutputArgs(msg, 'sfx/gnome.mp3', params[1], params[2]),
+                  });
+                  encoder.play();
+                }, num * 1000 * 60);
+                msg.reply("The gnome is near.");
+              }
             }
           }
       },
@@ -246,8 +248,9 @@ module.exports = {
           if (gnomeInterval) {
             clearInterval(gnomeInterval);
             msg.reply("The gnome has fallen asleep.");
+          } else {
+            msg.reply("No gnomes were found.");
           }
-          msg.reply("No gnomes were found.");
         }
     },
 
