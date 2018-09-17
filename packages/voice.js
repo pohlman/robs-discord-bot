@@ -232,7 +232,7 @@ module.exports = {
                   outputArgs: buildOutputArgs(msg, 'sfx/gnome.mp3', params[1], params[2]),
                 });
                 encoder.play();
-              }, num * 1000);
+              }, num * 1000 * 60);
               msg.reply("The gnome is near.");
             }
           }
