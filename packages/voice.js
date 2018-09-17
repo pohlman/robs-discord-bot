@@ -8,7 +8,7 @@ let encoder = false;
 let volume = 1.0;
 let gnomeInterval = null;
 
-const play = (msg, params) => {
+const play = (msg, params, cb) => {
   try {
     youtubedl.getInfo(params[0], ['--format=bestaudio/best'], (err, info) => {
       if (!err && info) {
@@ -22,6 +22,7 @@ const play = (msg, params) => {
           debug: true
         });
         encoder.play();
+        if (cb) cb();
       }
     });
   } catch (e) {
@@ -33,6 +34,7 @@ const play = (msg, params) => {
       debug: true
     });
     if (encoder) encoder.play();
+    if (cb) cb();
   }
 };
 
@@ -150,7 +152,7 @@ module.exports = {
         // Play Awol
         {
           alias: ['pawol'],
-          params: 'filename',
+          params: 'url, rate, tempo',
           help: 'RUN',
           action: (bot, msg, params) => {
               if (params.length < 1) {
@@ -166,15 +168,16 @@ module.exports = {
                 });
                 if (encoder) encoder.play();
                 setTimeout(() => {
-                  play(msg, params);
-                  setTimeout(() => {
-                    encoder = voiceConnection.createExternalEncoder({
-                      type: "ffmpeg",
-                      source: 'sfx/awol_end.mp3',
-                      outputArgs: buildOutputArgs(msg, 'sfx/awol_end.mp3', params[1], params[2]),
-                    });
-                    if (encoder) encoder.play();
-                  }, 1000);
+                  play(msg, params, () => {
+                    setTimeout(() => {
+                      encoder = voiceConnection.createExternalEncoder({
+                        type: "ffmpeg",
+                        source: 'sfx/awol_end.mp3',
+                        outputArgs: buildOutputArgs(msg, 'sfx/awol_end.mp3', params[1], params[2]),
+                      });
+                      if (encoder) encoder.play();
+                    }, 1000);
+                  });
                 }, 4250);
               }
           }
