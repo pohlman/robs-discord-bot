@@ -153,30 +153,45 @@ module.exports = {
           params: 'url, rate, tempo',
           help: 'RUN',
           action: (bot, msg, params) => {
-              if (params.length < 1) {
-                msg.reply('Please pass a filename');
-              } else if (!voiceConnection) {
-                msg.reply("I'm not in a voice channel, use !join first.");
-              } else {
+            if (params.length < 1) {
+              msg.reply('Please pass a filename');
+            } else if (!voiceConnection) {
+              msg.reply("I'm not in a voice channel, use !join first.");
+            } else {
 
-                encoder = voiceConnection.createExternalEncoder({
-                  type: "ffmpeg",
-                  source: 'sfx/awol_beginning.mp3',
-                  outputArgs: buildOutputArgs(msg, 'sfx/awol_beginning.mp3', params[1], params[2]),
-                });
-                if (encoder) encoder.play();
-                setTimeout(() => {
-                  play(msg, params);
+              youtubedl.getInfo(params[0], ['--format=bestaudio/best'], (err, info) => {
+                if (!err && info) {
+                  let t = params[0].match(/\?.*t=(\d+)/);
+                  if (t && t.length > 1) t = +t[1];
+                  if (isNaN(t)) t = undefined;
+
+                  encoder = voiceConnection.createExternalEncoder({
+                    type: "ffmpeg",
+                    source: 'sfx/awol_beginning.mp3',
+                    outputArgs: buildOutputArgs(msg, 'sfx/awol_beginning.mp3', params[1], params[2]),
+                  });
+                  if (encoder) encoder.play();
+
                   setTimeout(() => {
                     encoder = voiceConnection.createExternalEncoder({
                       type: "ffmpeg",
-                      source: 'sfx/awol_end.mp3',
-                      outputArgs: buildOutputArgs(msg, 'sfx/awol_end.mp3', params[1], params[2]),
+                      source: info.url,
+                      outputArgs: buildOutputArgs(msg, 44100, params[1], params[2], t),
+                      debug: true
                     });
-                    if (encoder) encoder.play();
-                  }, 1000);
-                }, 3000);
-              }
+                    encoder.play();
+                    setTimeout(() => {
+                      encoder = voiceConnection.createExternalEncoder({
+                        type: "ffmpeg",
+                        source: 'sfx/awol_end.mp3',
+                        outputArgs: buildOutputArgs(msg, 'sfx/awol_end.mp3', params[1], params[2]),
+                      });
+                      if (encoder) encoder.play();
+                    }, 1000);
+                  }, 4600);
+                }
+              });
+            }
           }
         },
 
