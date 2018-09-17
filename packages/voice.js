@@ -8,7 +8,7 @@ let encoder = false;
 let volume = 1.0;
 let gnomeInterval = null;
 
-const play = (msg, params, cb) => {
+const play = (msg, params) => {
   try {
     youtubedl.getInfo(params[0], ['--format=bestaudio/best'], (err, info) => {
       if (!err && info) {
@@ -22,7 +22,6 @@ const play = (msg, params, cb) => {
           debug: true
         });
         encoder.play();
-        if (cb) cb();
       }
     });
   } catch (e) {
@@ -34,7 +33,6 @@ const play = (msg, params, cb) => {
       debug: true
     });
     if (encoder) encoder.play();
-    if (cb) cb();
   }
 };
 
@@ -168,17 +166,16 @@ module.exports = {
                 });
                 if (encoder) encoder.play();
                 setTimeout(() => {
-                  play(msg, params, () => {
-                    setTimeout(() => {
-                      encoder = voiceConnection.createExternalEncoder({
-                        type: "ffmpeg",
-                        source: 'sfx/awol_end.mp3',
-                        outputArgs: buildOutputArgs(msg, 'sfx/awol_end.mp3', params[1], params[2]),
-                      });
-                      if (encoder) encoder.play();
-                    }, 1000);
-                  });
-                }, 4250);
+                  play(msg, params);
+                  setTimeout(() => {
+                    encoder = voiceConnection.createExternalEncoder({
+                      type: "ffmpeg",
+                      source: 'sfx/awol_end.mp3',
+                      outputArgs: buildOutputArgs(msg, 'sfx/awol_end.mp3', params[1], params[2]),
+                    });
+                    if (encoder) encoder.play();
+                  }, 1000);
+                }, 3000);
               }
           }
         },
