@@ -225,17 +225,15 @@ module.exports = {
             } else {
               const num = parseInt(params[0]);
               if (isNaN(num) || num < 1) msg.reply('Pass a time greater than 1 minute.');
-              encoder = voiceConnection.createExternalEncoder({
-                type: "ffmpeg",
-                source: 'sfx/gnome.mp3',
-                outputArgs: buildOutputArgs(msg, 'sfx/gnome.mp3', params[1], params[2]),
-              });
-              if (encoder) {
-                gnomeInterval = setInterval(() => {
-                  encoder.play();
-                }, num * 1000);
-                msg.reply("The gnome is near.");
-              }
+              gnomeInterval = setInterval(() => {
+                encoder = voiceConnection.createExternalEncoder({
+                  type: "ffmpeg",
+                  source: 'sfx/gnome.mp3',
+                  outputArgs: buildOutputArgs(msg, 'sfx/gnome.mp3', params[1], params[2]),
+                });
+                encoder.play();
+              }, num * 1000);
+              msg.reply("The gnome is near.");
             }
           }
       },
