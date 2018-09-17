@@ -6,7 +6,7 @@ const spawnSync = require('child_process').spawnSync;
 let voiceConnection = false;
 let encoder = false;
 let volume = 1.0;
-
+let gnomeInterval = null;
 
 const play = (msg, params) => {
   try {
@@ -205,7 +205,7 @@ module.exports = {
             action: (bot, msg, params) => {
                 let res = 'Sfx options: ';
                 const files = fs.readdirSync('sfx/');
-                for (let i=0;i<files.length;i++) {
+                for (let i = 0; i < files.length; i++) {
                     files[i] = files[i].substring(0, files[i].length - 4);
                 }
                 res += files.join(', ');
@@ -213,6 +213,43 @@ module.exports = {
             }
         },
 
+        // Gnome Timer
+        {
+          alias: ['gnome', 'g'],
+          help: 'Set the Gnome Timer',
+          action: (bot, msg, params) => {
+            if (params.length < 1) {
+              msg.reply('Please pass a time in minutes');
+            } else if (!voiceConnection) {
+                msg.reply("I'm not in a voice channel, use !join first.");
+            } else {
+              encoder = voiceConnection.createExternalEncoder({
+                type: "ffmpeg",
+                source: 'sfx/gnome.mp3',
+                outputArgs: buildOutputArgs(msg, 'sfx/gnome.mp3', params[1], params[2]),
+              });
+              if (encoder) {
+                gnomeInterval = setInterval(() => {
+                  encoder.play();
+                }, params[0] * 1000);
+                msg.reply("The gnome is near.");
+              }
+            }
+          }
+      },
+
+      // Cancel Gnome
+      {
+        alias: ['gnomestop', 'gstop', 'gs'],
+        help: 'Set the Gnome Timer',
+        action: (bot, msg, params) => {
+          if (gnomeInterval) {
+            clearInterval(gnomeInterval);
+            msg.reply("The gnome has fallen asleep.");
+          }
+          msg.reply("No gnomes were found.");
+        }
+    },
 
     ]
 };
