@@ -37,8 +37,8 @@ module.exports = {
 ```
 
 ### Voice
-Voice requires ffmpeg in your path and has only been tested on Ubuntu 14.04 and 16.04.
-The built in play function will first attempt to play as a YouTube link (with support for links with start time in the query params), and then will attempt to use ffmpeg to play it. It has only been tested with links to .mp3, .wav, .webm, and .ogg.
+Voice requires a recent version of ffmpeg in your path and has only been tested on Ubuntu 16.04.
+The built in play function will attempt to play any link with youtube-dl.
 
 The built in sfx function will work with any .mp3 file in the sfx/ folder
 
@@ -60,7 +60,7 @@ MISC
 ### License
 MIT License
 
-Copyright (c) 2018 Rob Pohlman
+Copyright (c) 2019 Rob Pohlman
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

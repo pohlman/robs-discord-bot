@@ -31,7 +31,7 @@ const play = (msg, params) => {
 
 
 function buildOutputArgs(msg, path, rate, tempo, seek) {
-  const outputArgs = ['-filter_complex'];
+  const outputArgs = [];
   let filter = '';
   
   if (rate) {
@@ -65,7 +65,10 @@ function buildOutputArgs(msg, path, rate, tempo, seek) {
       filter += 'atempo=' + num;
     }
   }
-  outputArgs.push(filter);
+  if (filter) {
+    outputArgs.push('-filter_complex');
+    outputArgs.push(filter);
+  }
   if (seek) {
     outputArgs.push('-ss');
     outputArgs.push(seek);
