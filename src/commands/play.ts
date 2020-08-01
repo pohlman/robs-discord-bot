@@ -20,7 +20,7 @@ const play: Command = {
     }
 
     const stream = await getYoutubeStream(url);
-    connectionCache[msg.guild.id].dispatcher = connection.play(stream);
+    connectionCache[msg.guild.id].dispatcher = connection.play(stream, { type: 'opus' });
   },
 };
 

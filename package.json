@@ -3,8 +3,8 @@
   "version": "2.0.0",
   "main": "dist/index.js",
   "scripts": {
-    "start": "tsc && node dist/index.js",
-    "start:service": "tsc && forever start dist/index.js"
+    "start": "rm -rf dist && tsc && node dist/index.js",
+    "start:service": "rm -rf dist && tsc && forever start dist/index.js"
   },
   "author": {
     "name": "Rob Pohlman",
