@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
-import { Command } from '../../types';
-import connectionCache from '../../helpers/connectionCache';
+import { Command } from '../types';
+import connectionCache from '../helpers/connectionCache';
 
 const join: Command = {
   help: 'Join a voice channel',

@@ -1,8 +1,7 @@
 import fs from 'fs';
 import path from 'path';
-import { Command } from '../../types';
-import connectionCache from '../../helpers/connectionCache';
-import { VoiceConnection } from 'discord.js';
+import { Command } from '../types';
+import connectionCache from '../helpers/connectionCache';
 
 const leave: Command = {
   help: 'Leave a voice channel',

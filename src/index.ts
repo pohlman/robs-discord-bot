@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 import Discord from 'discord.js';
-import commands from './commands';
+import * as commands from './commands';
 
 dotenv.config();
 
@@ -17,7 +17,7 @@ client.on('ready', () => {
 
 client.on('message', (msg) => {
   if (msg.content.startsWith('%') && msg.content.length > 1) {
-    const params = msg.content.split(' ');
+    const params = msg.content.trim().split(' ');
     const commandName = params.shift().substr(1).toLowerCase();
 
     if (commandName in commands) {
@@ -30,3 +30,5 @@ client.on('message', (msg) => {
 });
 
 client.login(token);
+
+process.on('unhandledRejection', (error) => console.error('Uncaught Promise Rejection', error));

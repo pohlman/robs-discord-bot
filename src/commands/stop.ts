@@ -1,5 +1,5 @@
-import { Command } from '../../types';
-import connectionCache from '../../helpers/connectionCache';
+import { Command } from '../types';
+import connectionCache from '../helpers/connectionCache';
 
 const stop: Command = {
   help: 'Stop playing audio',
