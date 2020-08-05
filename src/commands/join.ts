@@ -13,7 +13,7 @@ const join: Command = {
     }
     const connection = await authorChannel.join();
 
-    const joinSound = path.join(__dirname, '../../../join.mp3');
+    const joinSound = path.join(__dirname, '../../join.mp3');
     let dispatcher;
     if (fs.existsSync(joinSound)) {
       dispatcher = connection.play(joinSound);

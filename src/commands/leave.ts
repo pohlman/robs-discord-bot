@@ -10,7 +10,7 @@ const leave: Command = {
     delete connectionCache[msg.guild.id];
 
     if (connection) {
-      const leaveSound = path.join(__dirname, '../../../leave.mp3');
+      const leaveSound = path.join(__dirname, '../../leave.mp3');
       if (fs.existsSync(leaveSound)) {
         const dispatcher = connection.play(leaveSound);
         dispatcher.on('finish', () => {

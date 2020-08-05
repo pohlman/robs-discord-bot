@@ -16,9 +16,10 @@
     "dotenv": "^8.2.0",
     "ffmpeg-static": "^4.2.6",
     "giphy-api": "^2.0.1",
+    "libsodium-wrappers": "^0.7.8",
     "node-fetch": "^2.6.0",
     "opusscript": "0.0.7",
-    "ytdl-core-discord": "^1.2.1"
+    "youtube-dl": "*"
   },
   "keywords": [
     "node",

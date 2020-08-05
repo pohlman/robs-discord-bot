@@ -16,7 +16,7 @@ client.on('ready', () => {
 });
 
 client.on('message', (msg) => {
-  if (msg.content.startsWith('%') && msg.content.length > 1) {
+  if (msg.content.startsWith('!') && msg.content.length > 1) {
     const params = msg.content.trim().split(' ');
     const commandName = params.shift().substr(1).toLowerCase();
 
@@ -24,7 +24,7 @@ client.on('message', (msg) => {
       const command = commands[commandName];
       command.action(msg, params);
     } else {
-      msg.reply(`sorry, I don't know the command %${commandName}`);
+      msg.reply(`sorry, I don't know the command !${commandName}`);
     }
   }
 });
